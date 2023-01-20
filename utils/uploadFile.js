@@ -1,40 +1,19 @@
-const multer = require("multer")
+const multer = require("multer");
 
-const storage = multer.diskStorage(
-    {
-        destination: function(req, file, cb) 
-        {
-            cb(null, __dirname + '/uploads')
-            require('fs').writeFileSync('text.txt', 'hello world')
-        },
-        filename: function(req, file, cb)
-        {
-            cb(null, new Date().toISOString() + file.originalname)
-        }
-    })
+const storage = multer.diskStorage({
+  destination: (_, __, cb) => {
+    cb(null, __dirname + '/uploads/')
+  },
+  filename: (req, file, cb) => {
+    console.log(file);
+    cb(null, 'hi')
+  }
+});
 
-const fileFilter = (req, file, cb) =>
-    {
-        // reject a file
-        if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'image/jpg')
-        {
-            cb(null, true)
-        }
-        else
-        {
-            cb(null, false)
-        }
-    }
-
-const upload = multer(
-    {
-        storage: storage,
-        limits:
-        {
-            fileSize: 1024 * 1024 * 50
-        },
-        fileFilter : fileFilter
-    }
-
-)
-module.exports = upload
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 1024 * 1024 * 50 * 100000000,
+  },
+});
+module.exports = upload;
